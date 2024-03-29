@@ -13,7 +13,6 @@ tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
 tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
 tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
 
-
 def pregunta_01():
     """
     ¿Cuál es la cantidad de filas en la tabla `tbl0.tsv`?
@@ -22,7 +21,15 @@ def pregunta_01():
     40
 
     """
-    return
+
+    # Cargar el archivo CSV en un DataFrame
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+
+    # Obtener el número de columnas
+    num_filas = tbl0.shape[0]
+
+    return(num_filas)
+
 
 
 def pregunta_02():
@@ -33,7 +40,15 @@ def pregunta_02():
     4
 
     """
-    return
+
+    # Cargar el archivo CSV en un DataFrame
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+
+    # Obtener el número de columnas
+    num_columnas = tbl0.shape[1]
+
+    return(num_columnas)
+
 
 
 def pregunta_03():
@@ -50,7 +65,21 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+
+    # Cargar el archivo CSV en un DataFrame
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")    
+
+    # Contar la frecuencia de cada letra en la columna 'c1' y ordenar alfabéticamente
+    frecuencia_letras = tbl0['_c1'].value_counts().sort_index()
+
+    # Establecer el nombre de la serie
+    frecuencia_letras.name = '_c1'
+
+    # Eliminar el nombre del índice
+    frecuencia_letras.index.name = None
+
+    return(frecuencia_letras)
+
 
 
 def pregunta_04():
@@ -65,7 +94,15 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Calcular el promedio de _c2 por cada letra única en _c1
+    promedios_por_letra = df.groupby('_c1')['_c2'].mean()
+    
+    return promedios_por_letra
+
 
 
 def pregunta_05():
@@ -82,7 +119,15 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+
+    # Lee el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Calcula el valor máximo de _c2 por cada letra única en _c1
+    maximos_por_letra = df.groupby('_c1')['_c2'].max()
+    
+    return maximos_por_letra
+
 
 
 def pregunta_06():
@@ -94,7 +139,16 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl1.tsv', sep='\t')
+    
+    # Obtener las letras en mayúsculas, sin repetirse y ordenadas alfabéticamente
+    letras_unicas = df['_c4'].str.upper().unique()
+    letras_unicas_ordenadas = sorted(letras_unicas)
+    
+    return letras_unicas_ordenadas
+
 
 
 def pregunta_07():
@@ -110,7 +164,15 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Calcular la suma de _c2 por cada letra única en _c1
+    suma_por_letra = df.groupby('_c1')['_c2'].sum()
+    
+    return suma_por_letra
+
 
 
 def pregunta_08():
@@ -128,7 +190,15 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Agregar una nueva columna "suma" que contenga la suma de los valores de "_c0" y "_c2"
+    df['suma'] = df['_c0'] + df['_c2']
+    
+    return df
+
 
 
 def pregunta_09():
@@ -146,7 +216,15 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Extraer los primeros cuatro caracteres de cada valor en la columna "_c3" como el año
+    df['year'] = df['_c3'].str[:4]
+    
+    return df
+
 
 
 def pregunta_10():
@@ -163,7 +241,15 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+
+    # Leer el archivo TSV usando pandas
+    df = pd.read_csv('tbl0.tsv', sep='\t')
+    
+    # Agrupar por valores únicos en la columna "_c1" y agregar los valores correspondientes de "_c2" en una lista
+    grouped_df = df.groupby('_c1')['_c2'].apply(lambda x: ':'.join(map(str, sorted(x)))).reset_index()
+    
+    return grouped_df.set_index('_c1')
+
 
 
 def pregunta_11():
@@ -182,7 +268,21 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+
+    # Cargar el archivo tsv
+    df = pd.read_csv("tbl1.tsv", sep="\t")
+    
+    # Agrupar por la columna _c0 y aplicar la concatenación con comas en la columna _c4
+    grouped_df = df.groupby("_c0")["_c4"].apply(lambda x: ",".join(x)).reset_index()
+    
+    # Eliminar duplicados después de la concatenación
+    grouped_df["_c4"] = grouped_df["_c4"].str.split(",").apply(lambda x: ",".join(sorted(set(x))))
+    
+    # Renombrar las columnas
+    grouped_df.columns = ["_c0", "_c4"]
+    
+    return grouped_df  
+
 
 
 def pregunta_12():
@@ -200,7 +300,25 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    
+    # Cargar el archivo tbl2.tsv
+    tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
+    
+    # Convertir los valores de las columnas _c5a y _c5b a cadenas
+    tbl2['_c5a'] = tbl2['_c5a'].astype(str)
+    tbl2['_c5b'] = tbl2['_c5b'].astype(str)
+    
+    # Concatenar los valores de las columnas _c5a y _c5b con ':'
+    tbl2['_c5'] = tbl2['_c5a'] + ':' + tbl2['_c5b']
+    
+    # Agrupar y unir los valores concatenados
+    grouped_df = tbl2.groupby('_c0')['_c5'].apply(','.join).reset_index()
+    
+    # Eliminar duplicados después de la concatenación
+    grouped_df["_c5"] = grouped_df["_c5"].str.split(",").apply(lambda x: ",".join(sorted(set(x))))
+    
+    return grouped_df
+
 
 
 def pregunta_13():
@@ -217,4 +335,15 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+    
+    # Cargar los datos de los archivos tbl0.tsv y tbl2.tsv
+    tbl0 = pd.read_csv("tbl0.tsv", sep='\t')
+    tbl2 = pd.read_csv("tbl2.tsv", sep='\t')
+
+    # Combinar los datos de tbl0 y tbl2 usando la columna "_c0" como clave
+    merged_df = pd.merge(tbl0, tbl2, on="_c0")
+
+    # Calcular la suma de los valores de la columna "_c5b" por cada valor de la columna "_c1"
+    result = merged_df.groupby("_c1")["_c5b"].sum()
+
+    return result
